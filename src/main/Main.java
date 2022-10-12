@@ -17,7 +17,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         Graph graph = new Graph();
-        graph.readDocuments("C:\\Users\\Administrator\\dsa-lab-3\\src\\examples\\1.txt");
+        graph.readDocument("C:\\Users\\Administrator\\dsa-lab-3\\src\\examples\\1.txt");
 
         graph.getProperWay();
     }

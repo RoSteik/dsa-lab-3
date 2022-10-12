@@ -16,9 +16,9 @@ import java.util.*;
 public class Graph {
 
     private final HashMap<String, ArrayList<String>> vertex = new HashMap<>();
-    private final ArrayList<String> res = new ArrayList<>();
+    private final ArrayList<String> result = new ArrayList<>();
 
-    public void readDocuments(String path) throws IOException {
+    public void readDocument(String path) throws IOException {
         File file = new File(path);
         Scanner dataScanner = new Scanner(file);
 
@@ -32,34 +32,14 @@ public class Graph {
         if (vertex.containsKey(key)) {
             vertex.get(key).add(value);
         } else {
-            ArrayList<String> temp = new ArrayList<>();
-            temp.add(value);
-            vertex.put(key, temp);
+            ArrayList<String> temporary = new ArrayList<>();
+            temporary.add(value);
+            vertex.put(key, temporary);
         }
         if (!vertex.containsKey(value)) {
-            ArrayList<String> temp = new ArrayList<>();
-            vertex.put(value, temp);
+            ArrayList<String> temporary = new ArrayList<>();
+            vertex.put(value, temporary);
         }
-    }
-
-    private void recursiveFun(String v, HashMap<String, Boolean> visited) {
-        visited.put(v, Boolean.TRUE);
-        for (String x : vertex.get(v)) {
-            if (!visited.get(x)) {
-                recursiveFun(x, visited);
-                res.add(x);
-            }
-        }
-    }
-
-    private void safeRes() throws IOException {
-        StringBuffer result = new StringBuffer();
-        for (String str : res) {
-            result.append(str).append("\n");
-        }
-        Files.write(Paths.get("C:\\Users\\Administrator\\dsa-lab-3\\src\\result\\res.txt"),
-                Collections.singleton(result));
-        res.clear();
     }
 
     public void getProperWay() throws IOException {
@@ -72,8 +52,8 @@ public class Graph {
             throw new RuntimeException();
         }
         recursiveFun(root, visited);
-        res.add(root);
-        safeRes();
+        result.add(root);
+        saveResult();
     }
 
     private String getRootedElement() {
@@ -83,12 +63,12 @@ public class Graph {
             visited.put(v, Boolean.FALSE);
         }
 
-        String v = "";
+        String root = "";
 
         for (String vert : vertex.keySet()) {
             if (!visited.get(vert)) {
                 recursiveFun(vert, visited);
-                v = vert;
+                root = vert;
             }
         }
 
@@ -96,13 +76,37 @@ public class Graph {
             visited.put(vert, Boolean.FALSE);
         }
 
-        recursiveFun(v, visited);
+        recursiveFun(root, visited);
         for (String str : visited.keySet()) {
             if (!visited.get(str)) {
                 return null;
             }
         }
-        res.clear();
-        return v;
+        result.clear();
+
+        return root;
     }
+
+
+    private void recursiveFun(String v, HashMap<String, Boolean> visited) {
+        visited.put(v, Boolean.TRUE);
+        for (String x : vertex.get(v)) {
+            if (!visited.get(x)) {
+                recursiveFun(x, visited);
+                result.add(x);
+            }
+        }
+    }
+
+    private void saveResult() throws IOException {
+        StringBuffer result = new StringBuffer();
+        for (String str : this.result) {
+            result.append(str).append("\n");
+        }
+        Files.write(Paths.get("C:\\Users\\Administrator\\dsa-lab-3\\src\\result\\res.txt"),
+                Collections.singleton(result));
+        this.result.clear();
+    }
+
 }
+
